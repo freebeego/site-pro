@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+
+    mysql:
+        image: mariadb:10.9.3
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE_NAME}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_USER_PASSWORD}
+            MYSQL_PORT: ${DB_DEBUG_MYSQL_PORT}
+        # External access to database
+        ports:
+            - ${DB_DEBUG_MYSQL_PORT:-3306}:3306
+
+    php:
+        build:
+            context: docker/php
+            args:
+                MODE: ${MODE}
+                HOST_USER_ID: ${HOST_USER_ID}
+                HOST_GROUP_ID: ${HOST_GROUP_ID}
+        depends_on:
+            - mysql
+        volumes:
+            - ./src:/var/www:cached
+        environment:
+            DB_HOST: mysql
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_USER_PASSWORD}
+            DB_DATABASE: ${DB_DATABASE_NAME}
+            XDEBUG_MODE: "develop,debug,trace"
+            XDEBUG_CONFIG: "client_host=${XDEBUG_HOST:-host.docker.internal} client_port=${XDEBUG_PORT:-9000} start_with_request=yes log='/var/www/logs/xdebug.log' cli_color=1"
+
+    nginx:
+        build:
+            context: docker/nginx
+        depends_on:
+            - php
+        ports:
+            - ${NGINX_PORT:-80}:80
+        volumes:
+            - ./src:/var/www:cached
