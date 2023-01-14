@@ -32,7 +32,7 @@ services:
             DB_PASSWORD: ${DB_USER_PASSWORD}
             DB_DATABASE: ${DB_DATABASE_NAME}
             XDEBUG_MODE: "develop,debug,trace"
-            XDEBUG_CONFIG: "client_host=${XDEBUG_HOST:-host.docker.internal} client_port=${XDEBUG_PORT:-9000} start_with_request=yes log='/var/www/logs/xdebug.log' cli_color=1"
+            XDEBUG_CONFIG: "client_host=${XDEBUG_HOST:-localhost} client_port=${XDEBUG_PORT:-9000} start_with_request=yes log='/var/www/logs/xdebug.log' cli_color=1"
 
     nginx:
         build:
