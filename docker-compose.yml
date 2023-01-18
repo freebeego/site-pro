@@ -12,8 +12,8 @@ services:
             MYSQL_PASSWORD: ${DB_USER_PASSWORD}
             MYSQL_PORT: ${DB_DEBUG_MYSQL_PORT}
         # External access to database
-        ports:
-            - ${DB_DEBUG_MYSQL_PORT:-3306}:3306
+        #ports:
+        #    - ${DB_DEBUG_MYSQL_PORT:-3306}:3306
 
     php:
         build:
@@ -34,8 +34,8 @@ services:
             DB_DATABASE: ${DB_DATABASE_NAME}
             SECRET: ${SECRET}
             HTTP_DOMAIN: ${HTTP_DOMAIN}
-            XDEBUG_MODE: "develop,debug,trace"
-            XDEBUG_CONFIG: "client_host=${XDEBUG_HOST:-localhost} client_port=${XDEBUG_PORT:-9000} start_with_request=yes log='/var/www/logs/xdebug.log' cli_color=1"
+            #XDEBUG_MODE: "develop,debug,trace"
+            #XDEBUG_CONFIG: "client_host=${XDEBUG_HOST:-localhost} client_port=${XDEBUG_PORT:-9000} start_with_request=yes log='/var/www/logs/xdebug.log' cli_color=1"
 
     nginx:
         build:
